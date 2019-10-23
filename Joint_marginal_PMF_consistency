@@ -1,0 +1,27 @@
+# [1,1,0,1,0,1] from LSB(left) to MSB(right)
+set2intBinary:=function(s)
+local ans,i;
+ans := 0;
+for i in [1..Length(s)] do
+  if s[i] > 0 then
+  ans := ans + 2^(i - 1);
+  fi;
+od;
+return ans;
+end;
+
+## generate all binary list: [1,0,1,1] from LSB(left) to MSB(right)
+BinaryList:=function(len)
+local g,i,bin,binList,orbi;
+g := SymmetricGroup(len);
+bin := ZeroMutable([1..len]);
+binList := [];
+Append(binList,[ZeroMutable([1..len])]);
+for i in [1..len - 1] do
+  bin[i] := 1;
+  orbi := Orbit(g,bin,Permuted);
+  Append(binList,orbi);
+od;
+Append(binList,[ZeroMutable([1..len])+1]);
+return binList;
+end;
