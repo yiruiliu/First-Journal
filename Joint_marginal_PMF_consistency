@@ -44,7 +44,9 @@ for i in [ 1 .. 2 ^ carTotal ] do
   Append( A, [ copyvec1 ] );
   Append( b, [0] );
 od;
-equal := ZeroMutable( [ 1 .. 2 ^ car1 + 2 ^ car2 + 2 ^ carTotal ] ) + 1;
+equal := ZeroMutable( [ 1 .. 2 ^ car1 + 2 ^ car2 ] );
+vec2 := ZeroMutable( [ 1 .. 2 ^ carTotal ] ) + 1;
+Append( equal, vec2 );
 Append( A, [ equal ] );
 Append( b, [ 1 ] );
 Append( linrows, [ Length(A) ] );
@@ -98,4 +100,78 @@ for ins in orbit2 do
   Append( linrows, [ k ] );
 od;
 return[A, b, linrows];
+end;
+
+##Main function of calculating two marginal PMF sets from one big joint PMF
+MainPMF := function( carTotal, car1, car2 )
+local rlist1, rlist2, A, b, linrows, vec1, vec2;
+rlist1 := PMFbigWithLeadingZeros( carTotal, car1, car2 );
+rlist2 := ExtraDimensions( rlist1[1], rlist1[2], rlist1[3], carTotal, car1, car2 );
+A := rlist2[1];
+b := rlist2[2];
+linrows := rlist2[3];
+return [ A, b, linrows ];
+end;
+
+#################start from two marginal PMFs
+StartFromMarginal := function( carTotal, car1, car2 )
+local A, b, linrows, vec1, vec2, copyvec1, copyvec2, i, orbitIntersec, orbit1, orbit2, carInter,
+help1, help2, oInter, index1, index2, oInter2;
+A := [ ];
+b := [ ];
+linrows := [ ];
+vec1 := ZeroMutable( [ 1 .. 2^car1 ] );
+vec2 := ZeroMutable( [ 1 .. 2^car2 ] );
+copyvec1 := ShallowCopy( vec1 ) + 1;
+copyvec2 := ShallowCopy( vec2 );
+Append( copyvec1, copyvec2 );
+Append( A, [ copyvec1 ] );
+Append( b, [ 1 ] );
+copyvec1 := ShallowCopy( vec1 );
+copyvec2 := ShallowCopy( vec2 ) + 1;
+Append( copyvec1, copyvec2 );
+Append( A, [ copyvec1 ] );
+Append( b, [ 1 ] );
+for i in [ 1 .. 2 ^ car1 ] do
+  copyvec1 := ShallowCopy( vec1 );
+  copyvec2 := ShallowCopy( vec2 );
+  copyvec1[ i ] := -1; # x_i >= 0
+  Append( copyvec1, copyvec2 );
+  Append( A, [ copyvec1 ] );
+  Append( b, [ 0 ] );
+od;
+for i in [ 1 .. 2 ^ car2 ] do
+  copyvec1 := ShallowCopy( vec1 );
+  copyvec2 := ShallowCopy( vec2 );
+  copyvec2[ i ] := -1; # x_i >= 0
+  Append( copyvec1, copyvec2 );
+  Append( A, [ copyvec1 ] );
+  Append( b, [ 0 ] );
+od;
+carInter := car1 + car2 - carTotal;
+orbitIntersec := BinaryList( carInter );
+orbit1 := BinaryList( car1 - carInter );
+orbit2 := BinaryList( car2 - carInter );
+for oInter in orbitIntersec do
+  copyvec1 := ShallowCopy( vec1 );
+  copyvec2 := ShallowCopy( vec2 );
+  for help1 in orbit1 do
+    help1 := ShallowCopy( help1 );
+    Append( help1, oInter);
+    index1 := set2intBinary( help1 ) + 1;
+    copyvec1[ index1 ] := 1;
+  od;
+  for help2 in orbit2 do
+    oInter2 := ShallowCopy( oInter );
+    help2 := ShallowCopy( help2 );
+    Append( oInter2, help2 );
+    index2 := set2intBinary( oInter2 ) + 1;
+    copyvec2[ index2 ] := -1;
+  od;
+  Append( copyvec1, copyvec2 );
+  Append( A, [ copyvec1 ] );
+  Append( b, [ 0 ] );
+  Append( linrows, [ Length( b ) ] );
+od;
+return [ A, b, linrows ];
 end;
