@@ -26,6 +26,34 @@ Append(binList,[ZeroMutable([1..len])+1]);
 return binList;
 end;
 
+TernaryList := function( len )
+local g, i, j, ter, terList, orbi, ter1;
+g := SymmetricGrooup( len );
+ter := ZeroMutable( [ 1 .. len ] );
+terList := [];
+Append( terList, [ ZeroMutable( [ 1 .. len ] ) + 1 ] );
+for i in [ 1 .. len - 1] do
+  ter[1] := 1;
+  orbi := Orbit( g, ter, Permuted );
+  Append( terList, orbi );
+od;
+Append( terList, [ ZeroMutable( [ 1 .. len ] ) + 1 ] );
+ter := ZeroMutable( [ 1 .. len ] );
+for j in [ 2 .. len - 1 ] do
+  ter[j] := 2;
+  orbi := Orbit( g, ter, Permuted );
+  Append( terList, orbi );
+  ter1 := ShallowCopy( ter );
+  for i in [ j + 1 .. len ] do
+    ter1[i] := 1;
+    orbi := Orbit( g, ter1, Permuted );
+    Append( terList, orbi );
+  od;
+od;
+Append( terList, [ ZeroMutable( [ 1 .. len ] ) + 2 ] );
+return terList;
+end;
+
 ## Joint PMF of binary RVs on to two set of marginals 
 ## carTotal, car1, car2: cardinality of big set, cardinality of set 1, cardinality of set 2. For example, 
 ## (5,4,3) corresponds to {1,..,5}, {1,..,4}, {3,..,5}
