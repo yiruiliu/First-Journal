@@ -28,18 +28,18 @@ end;
 
 TernaryList := function( len )
 local g, i, j, ter, terList, orbi, ter1;
-g := SymmetricGrooup( len );
+g := SymmetricGroup( len );
 ter := ZeroMutable( [ 1 .. len ] );
 terList := [];
-Append( terList, [ ZeroMutable( [ 1 .. len ] ) + 1 ] );
+Append( terList, [ ZeroMutable( [ 1 .. len ] ) ] );
 for i in [ 1 .. len - 1] do
-  ter[1] := 1;
+  ter[i] := 1;
   orbi := Orbit( g, ter, Permuted );
   Append( terList, orbi );
 od;
 Append( terList, [ ZeroMutable( [ 1 .. len ] ) + 1 ] );
 ter := ZeroMutable( [ 1 .. len ] );
-for j in [ 2 .. len - 1 ] do
+for j in [ 1 .. len - 1 ] do
   ter[j] := 2;
   orbi := Orbit( g, ter, Permuted );
   Append( terList, orbi );
