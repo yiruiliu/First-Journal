@@ -104,19 +104,23 @@ end;
 
 ##Main function of calculating two marginal PMF sets from one big joint PMF
 MainPMF := function( carTotal, car1, car2 )
-local rlist1, rlist2, A, b, linrows, vec1, vec2;
+local rlist1, rlist2, A, b, linrows, vec1, vec2, G, dimTokeep, carInter, rlist;
 rlist1 := PMFbigWithLeadingZeros( carTotal, car1, car2 );
 rlist2 := ExtraDimensions( rlist1[1], rlist1[2], rlist1[3], carTotal, car1, car2 );
 A := rlist2[1];
 b := rlist2[2];
 linrows := rlist2[3];
-return [ A, b, linrows ];
+G := Group( [ () ] );
+carInter := car1 + car2 - carTotal;
+dimTokeep := 2 ^ car1 + 2 ^ car2 - 2 ^ carInter;
+rlist := symCHM( A, b, linrows, dimTokeep, G, OnProjPts, OnProjIneq, false );
+return rlist;
 end;
 
 #################start from two marginal PMFs
 StartFromMarginal := function( carTotal, car1, car2 )
 local A, b, linrows, vec1, vec2, copyvec1, copyvec2, i, orbitIntersec, orbit1, orbit2, carInter,
-help1, help2, oInter, index1, index2, oInter2;
+help1, help2, oInter, index1, index2, oInter2, G, dimTokeep, rlist;
 A := [ ];
 b := [ ];
 linrows := [ ];
@@ -173,5 +177,18 @@ for oInter in orbitIntersec do
   Append( b, [ 0 ] );
   Append( linrows, [ Length( b ) ] );
 od;
-return [ A, b, linrows ];
+
+G := Group( [ () ] );
+dimTokeep := 2 ^ car1 + 2 ^ car2 - 2 ^ carInter;
+rlist := symCHM( A, b, linrows, dimTokeep, G, OnProjPts, OnProjIneq, false );
+return rlist;
+end;
+
+CheckResult := function( carTotal, car1, car2 )
+local rlist1, rlist2, d1, d2;
+rlist1 := MainPMF( carTotal, car1, car2 );
+rlist2 := StartFromMarginal( carTotal, car1, car2 );
+d1 := Difference(rlist1[1],rlist2[1]);
+d2 := Difference(rlist2[1],rlist1[1]);
+return [d1, d2];
 end;
