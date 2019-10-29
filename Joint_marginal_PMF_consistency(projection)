@@ -1,11 +1,10 @@
-# [1,1,0,1,0,1] from LSB(left) to MSB(right)
-set2intBinary:=function(s)
+# exp. binary [1,1,0,1,0,1] from LSB(left) to MSB(right) equals 2^0 + 2^1 + 2^3 + 2^5
+# alsize denotes the size of the alphabet
+set2intBT:=function( s, alsize )
 local ans,i;
 ans := 0;
 for i in [1..Length(s)] do
-    if s[i] > 0 then
-    ans := ans + 2^(i - 1);
-    fi;
+    ans := ans + s[ i ] * alsize ^ (i - 1);
 od;
 return ans;
 end;
@@ -54,17 +53,27 @@ Append( terList, [ ZeroMutable( [ 1 .. len ] ) + 2 ] );
 return terList;
 end;
 
-## Joint PMF of binary RVs on to two set of marginals 
+BTList := function( len, alsize )
+local btlist;
+if alsize = 2 then
+    btlist := BinaryList( len );
+fi;
+if alsize = 3 then
+    btlist := TernaryList( len );
+fi;
+return btlist;
+end;
+
+## Joint PMF of RVs on to two set of marginals 
 ## carTotal, car1, car2: cardinality of big set, cardinality of set 1, cardinality of set 2. For example, 
 ## (5,4,3) corresponds to {1,..,5}, {1,..,4}, {3,..,5}
-PMFbigWithLeadingZeros:=function(carTotal,car1,car2)
+PMFbigWithLeadingZeros:=function( carTotal, car1, car2, alsize )
 local A, b, vec1, vec2, copyvec1, copyvec2, linrows, i, equal;
 A := [];
 b := [];
-linrows := [];
-vec1 := ZeroMutable( [ 1 .. 2 ^ car1 + 2 ^ car2 ] );
-vec2 := ZeroMutable( [ 1 .. 2 ^ carTotal ] );
-for i in [ 1 .. 2 ^ carTotal ] do
+vec1 := ZeroMutable( [ 1 .. alsize ^ car1 + alsize ^ car2 ] );
+vec2 := ZeroMutable( [ 1 .. alsize ^ carTotal ] );
+for i in [ 1 .. alsize ^ carTotal ] do
     copyvec1 := ShallowCopy( vec1 );
     copyvec2 := ShallowCopy( vec2 );
     copyvec2[ i ] := -1;
@@ -72,34 +81,34 @@ for i in [ 1 .. 2 ^ carTotal ] do
     Append( A, [ copyvec1 ] );
     Append( b, [0] );
 od;
-equal := ZeroMutable( [ 1 .. 2 ^ car1 + 2 ^ car2 ] );
-vec2 := ZeroMutable( [ 1 .. 2 ^ carTotal ] ) + 1;
+equal := ZeroMutable( [ 1 .. alsize ^ car1 + alsize ^ car2 ] );
+vec2 := ZeroMutable( [ 1 .. alsize ^ carTotal ] ) + 1;
 Append( equal, vec2 );
 Append( A, [ equal ] );
 Append( b, [ 1 ] );
-Append( linrows, [ Length(A) ] );
-return [ A, b, linrows];
+return [ A, b];
 end;
 
-ExtraDimensions := function ( A, b, linrows, carTotal, car1, car2)
+ExtraDimensions := function ( A, b, carTotal, car1, car2, alsize )
 local vec1, vec2, copyvec1, copyvec2, orbit1, helporbit1, orbit2, helporbit2, i, ins,
-index1, help, inscopy, index2, k, len1, help2;
-vec1 := ZeroMutable( [ 1 .. 2 ^ car1 + 2 ^ car2 ] );
-vec2 := ZeroMutable( [ 1 .. 2 ^ carTotal ] );
-orbit1 := BinaryList( car1 );
-orbit2 := BinaryList( car2 );
-helporbit1 := BinaryList( carTotal - car1 );
-helporbit2 := BinaryList( carTotal - car2 );
+index1, help, inscopy, index2, k, len1, help2, linrows;
+linrows := [];
+vec1 := ZeroMutable( [ 1 .. alsize ^ car1 + alsize ^ car2 ] );
+vec2 := ZeroMutable( [ 1 .. alsize ^ carTotal ] );
+orbit1 := BTList( car1, alsize );
+orbit2 := BTList( car2, alsize );
+helporbit1 := BTList( carTotal - car1, alsize );
+helporbit2 := BTList( carTotal - car2, alsize );
 k := Length( b );
 for ins in orbit1 do
     copyvec1 := ShallowCopy( vec1 );
     copyvec2 := ShallowCopy( vec2 );
-    index1 := set2intBinary( ins ) + 1;
+    index1 := set2intBT( ins, alsize ) + 1;
     copyvec1[ index1 ] := 1;
     for help in helporbit1 do
         inscopy := ShallowCopy( ins );
         Append( inscopy, help );
-        index2 := set2intBinary( inscopy ) + 1;
+        index2 := set2intBT( inscopy, alsize ) + 1;
         copyvec2[ index2 ] := -1;
     od;
     Append( copyvec1, copyvec2 );
@@ -108,17 +117,17 @@ for ins in orbit1 do
     k := k + 1;
     Append( linrows, [ k ] );
 od;
-len1 := 2 ^ car1;
+len1 := alsize ^ car1;
 for ins in orbit2 do
     copyvec1 := ShallowCopy( vec1 );
     copyvec2 := ShallowCopy( vec2 );
-    index1 := set2intBinary( ins ) + 1 + len1;
+    index1 := set2intBT( ins, alsize ) + 1 + len1;
     copyvec1[ index1 ] := 1;
     for help in helporbit2 do
         help2 := ShallowCopy(help);
         inscopy := ShallowCopy( ins );
         Append(help2, inscopy);
-        index2 := set2intBinary( help2 ) + 1;
+        index2 := set2intBT( help2, alsize ) + 1;
         copyvec2[ index2 ] := -1;
     od;
     Append( copyvec1, copyvec2 );
@@ -131,29 +140,29 @@ return[A, b, linrows];
 end;
 
 ##Main function of calculating two marginal PMF sets from one big joint PMF
-MainPMF := function( carTotal, car1, car2 )
+MainPMF := function( carTotal, car1, car2, alsize )
 local rlist1, rlist2, A, b, linrows, vec1, vec2, G, dimTokeep, carInter, rlist;
-rlist1 := PMFbigWithLeadingZeros( carTotal, car1, car2 );
-rlist2 := ExtraDimensions( rlist1[1], rlist1[2], rlist1[3], carTotal, car1, car2 );
+rlist1 := PMFbigWithLeadingZeros( carTotal, car1, car2, alsize );
+rlist2 := ExtraDimensions( rlist1[1], rlist1[2], carTotal, car1, car2, alsize );
 A := rlist2[1];
 b := rlist2[2];
 linrows := rlist2[3];
 G := Group( [ () ] );
 carInter := car1 + car2 - carTotal;
-dimTokeep := 2 ^ car1 + 2 ^ car2 - 2 ^ carInter;
+dimTokeep := alsize ^ car1 + alsize ^ car2 - alsize ^ carInter;
 rlist := symCHM( A, b, linrows, dimTokeep, G, OnProjPts, OnProjIneq, false );
 return rlist;
 end;
-2
+
 #################start from two marginal PMFs
-StartFromMarginal := function( carTotal, car1, car2 )
+StartFromMarginal := function( carTotal, car1, car2, alsize )
 local A, b, linrows, vec1, vec2, copyvec1, copyvec2, i, orbitIntersec, orbit1, orbit2, carInter,
 help1, help2, oInter, index1, index2, oInter2, G, dimTokeep, rlist;
 A := [ ];
 b := [ ];
 linrows := [ ];
-vec1 := ZeroMutable( [ 1 .. 2^car1 ] );
-vec2 := ZeroMutable( [ 1 .. 2^car2 ] );
+vec1 := ZeroMutable( [ 1 .. alsize ^ car1 ] );
+vec2 := ZeroMutable( [ 1 .. alsize ^ car2 ] );
 copyvec1 := ShallowCopy( vec1 ) + 1;
 copyvec2 := ShallowCopy( vec2 );
 Append( copyvec1, copyvec2 );
@@ -164,7 +173,7 @@ copyvec2 := ShallowCopy( vec2 ) + 1;
 Append( copyvec1, copyvec2 );
 Append( A, [ copyvec1 ] );
 Append( b, [ 1 ] );
-for i in [ 1 .. 2 ^ car1 ] do
+for i in [ 1 .. alsize ^ car1 ] do
     copyvec1 := ShallowCopy( vec1 );
     copyvec2 := ShallowCopy( vec2 );
     copyvec1[ i ] := -1; # x_i >= 0
@@ -172,7 +181,7 @@ for i in [ 1 .. 2 ^ car1 ] do
     Append( A, [ copyvec1 ] );
     Append( b, [ 0 ] );
 od;
-for i in [ 1 .. 2 ^ car2 ] do
+for i in [ 1 .. alsize ^ car2 ] do
     copyvec1 := ShallowCopy( vec1 );
     copyvec2 := ShallowCopy( vec2 );
     copyvec2[ i ] := -1; # x_i >= 0
@@ -181,23 +190,23 @@ for i in [ 1 .. 2 ^ car2 ] do
     Append( b, [ 0 ] );
 od;
 carInter := car1 + car2 - carTotal;
-orbitIntersec := BinaryList( carInter );
-orbit1 := BinaryList( car1 - carInter );
-orbit2 := BinaryList( car2 - carInter );
+orbitIntersec := BTList( carInter, alsize );
+orbit1 := BTList( car1 - carInter, alsize );
+orbit2 := BTList( car2 - carInter, alsize );
 for oInter in orbitIntersec do
     copyvec1 := ShallowCopy( vec1 );
     copyvec2 := ShallowCopy( vec2 );
     for help1 in orbit1 do
         help1 := ShallowCopy( help1 );
         Append( help1, oInter);
-        index1 := set2intBinary( help1 ) + 1;
+        index1 := set2intBT( help1, alsize ) + 1;
         copyvec1[ index1 ] := 1;
     od;
     for help2 in orbit2 do
         oInter2 := ShallowCopy( oInter );
         help2 := ShallowCopy( help2 );
         Append( oInter2, help2 );
-        index2 := set2intBinary( oInter2 ) + 1;
+        index2 := set2intBT( oInter2, alsize ) + 1;
         copyvec2[ index2 ] := -1;
     od;
     Append( copyvec1, copyvec2 );
@@ -207,15 +216,15 @@ for oInter in orbitIntersec do
 od;
 
 G := Group( [ () ] );
-dimTokeep := 2 ^ car1 + 2 ^ car2 - 2 ^ carInter;
+dimTokeep := alsize ^ car1 + alsize ^ car2 - alsize ^ carInter;
 rlist := symCHM( A, b, linrows, dimTokeep, G, OnProjPts, OnProjIneq, false );
 return rlist;
 end;
 
-CheckResult := function( carTotal, car1, car2 )
+CheckResult := function( carTotal, car1, car2, alsize )
 local rlist1, rlist2, d1, d2;
-rlist1 := MainPMF( carTotal, car1, car2 );
-rlist2 := StartFromMarginal( carTotal, car1, car2 );
+rlist1 := MainPMF( carTotal, car1, car2, alsize );
+rlist2 := StartFromMarginal( carTotal, car1, car2, alsize );
 d1 := Difference(rlist1[1],rlist2[1]);
 d2 := Difference(rlist2[1],rlist1[1]);
 return [d1, d2];
