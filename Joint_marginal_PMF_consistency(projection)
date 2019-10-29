@@ -144,7 +144,7 @@ dimTokeep := 2 ^ car1 + 2 ^ car2 - 2 ^ carInter;
 rlist := symCHM( A, b, linrows, dimTokeep, G, OnProjPts, OnProjIneq, false );
 return rlist;
 end;
-
+2
 #################start from two marginal PMFs
 StartFromMarginal := function( carTotal, car1, car2 )
 local A, b, linrows, vec1, vec2, copyvec1, copyvec2, i, orbitIntersec, orbit1, orbit2, carInter,
