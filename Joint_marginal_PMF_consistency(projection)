@@ -3,9 +3,9 @@ set2intBinary:=function(s)
 local ans,i;
 ans := 0;
 for i in [1..Length(s)] do
-  if s[i] > 0 then
-  ans := ans + 2^(i - 1);
-  fi;
+    if s[i] > 0 then
+    ans := ans + 2^(i - 1);
+    fi;
 od;
 return ans;
 end;
@@ -18,9 +18,9 @@ bin := ZeroMutable([1..len]);
 binList := [];
 Append(binList,[ZeroMutable([1..len])]);
 for i in [1..len - 1] do
-  bin[i] := 1;
-  orbi := Orbit(g,bin,Permuted);
-  Append(binList,orbi);
+    bin[i] := 1;
+    orbi := Orbit(g,bin,Permuted);
+    Append(binList,orbi);
 od;
 Append(binList,[ZeroMutable([1..len])+1]);
 return binList;
@@ -33,22 +33,22 @@ ter := ZeroMutable( [ 1 .. len ] );
 terList := [];
 Append( terList, [ ZeroMutable( [ 1 .. len ] ) ] );
 for i in [ 1 .. len - 1] do
-  ter[i] := 1;
-  orbi := Orbit( g, ter, Permuted );
-  Append( terList, orbi );
+    ter[i] := 1;
+    orbi := Orbit( g, ter, Permuted );
+    Append( terList, orbi );
 od;
 Append( terList, [ ZeroMutable( [ 1 .. len ] ) + 1 ] );
 ter := ZeroMutable( [ 1 .. len ] );
 for j in [ 1 .. len - 1 ] do
-  ter[j] := 2;
-  orbi := Orbit( g, ter, Permuted );
-  Append( terList, orbi );
-  ter1 := ShallowCopy( ter );
-  for i in [ j + 1 .. len ] do
-    ter1[i] := 1;
-    orbi := Orbit( g, ter1, Permuted );
+    ter[j] := 2;
+    orbi := Orbit( g, ter, Permuted );
     Append( terList, orbi );
-  od;
+    ter1 := ShallowCopy( ter );
+    for i in [ j + 1 .. len ] do
+        ter1[i] := 1;
+        orbi := Orbit( g, ter1, Permuted );
+        Append( terList, orbi );
+    od;
 od;
 Append( terList, [ ZeroMutable( [ 1 .. len ] ) + 2 ] );
 return terList;
@@ -65,12 +65,12 @@ linrows := [];
 vec1 := ZeroMutable( [ 1 .. 2 ^ car1 + 2 ^ car2 ] );
 vec2 := ZeroMutable( [ 1 .. 2 ^ carTotal ] );
 for i in [ 1 .. 2 ^ carTotal ] do
-  copyvec1 := ShallowCopy( vec1 );
-  copyvec2 := ShallowCopy( vec2 );
-  copyvec2[ i ] := -1;
-  Append( copyvec1, copyvec2 );
-  Append( A, [ copyvec1 ] );
-  Append( b, [0] );
+    copyvec1 := ShallowCopy( vec1 );
+    copyvec2 := ShallowCopy( vec2 );
+    copyvec2[ i ] := -1;
+    Append( copyvec1, copyvec2 );
+    Append( A, [ copyvec1 ] );
+    Append( b, [0] );
 od;
 equal := ZeroMutable( [ 1 .. 2 ^ car1 + 2 ^ car2 ] );
 vec2 := ZeroMutable( [ 1 .. 2 ^ carTotal ] ) + 1;
@@ -92,40 +92,40 @@ helporbit1 := BinaryList( carTotal - car1 );
 helporbit2 := BinaryList( carTotal - car2 );
 k := Length( b );
 for ins in orbit1 do
-  copyvec1 := ShallowCopy( vec1 );
-  copyvec2 := ShallowCopy( vec2 );
-  index1 := set2intBinary( ins ) + 1;
-  copyvec1[ index1 ] := 1;
-  for help in helporbit1 do
-    inscopy := ShallowCopy( ins );
-    Append( inscopy, help );
-    index2 := set2intBinary( inscopy ) + 1;
-    copyvec2[ index2 ] := -1;
-  od;
-  Append( copyvec1, copyvec2 );
-  Append( A, [copyvec1] );
-  Append( b, [ 0 ] );
-  k := k + 1;
-  Append( linrows, [ k ] );
+    copyvec1 := ShallowCopy( vec1 );
+    copyvec2 := ShallowCopy( vec2 );
+    index1 := set2intBinary( ins ) + 1;
+    copyvec1[ index1 ] := 1;
+    for help in helporbit1 do
+        inscopy := ShallowCopy( ins );
+        Append( inscopy, help );
+        index2 := set2intBinary( inscopy ) + 1;
+        copyvec2[ index2 ] := -1;
+    od;
+    Append( copyvec1, copyvec2 );
+    Append( A, [copyvec1] );
+    Append( b, [ 0 ] );
+    k := k + 1;
+    Append( linrows, [ k ] );
 od;
 len1 := 2 ^ car1;
 for ins in orbit2 do
-  copyvec1 := ShallowCopy( vec1 );
-  copyvec2 := ShallowCopy( vec2 );
-  index1 := set2intBinary( ins ) + 1 + len1;
-  copyvec1[ index1 ] := 1;
-  for help in helporbit2 do
-    help2 := ShallowCopy(help);
-    inscopy := ShallowCopy( ins );
-    Append(help2, inscopy);
-    index2 := set2intBinary( help2 ) + 1;
-    copyvec2[ index2 ] := -1;
-  od;
-  Append( copyvec1, copyvec2 );
-  Append( A, [copyvec1] );
-  Append( b, [ 0 ] );
-  k := k + 1;
-  Append( linrows, [ k ] );
+    copyvec1 := ShallowCopy( vec1 );
+    copyvec2 := ShallowCopy( vec2 );
+    index1 := set2intBinary( ins ) + 1 + len1;
+    copyvec1[ index1 ] := 1;
+    for help in helporbit2 do
+        help2 := ShallowCopy(help);
+        inscopy := ShallowCopy( ins );
+        Append(help2, inscopy);
+        index2 := set2intBinary( help2 ) + 1;
+        copyvec2[ index2 ] := -1;
+    od;
+    Append( copyvec1, copyvec2 );
+    Append( A, [copyvec1] );
+    Append( b, [ 0 ] );
+    k := k + 1;
+    Append( linrows, [ k ] );
 od;
 return[A, b, linrows];
 end;
@@ -165,45 +165,45 @@ Append( copyvec1, copyvec2 );
 Append( A, [ copyvec1 ] );
 Append( b, [ 1 ] );
 for i in [ 1 .. 2 ^ car1 ] do
-  copyvec1 := ShallowCopy( vec1 );
-  copyvec2 := ShallowCopy( vec2 );
-  copyvec1[ i ] := -1; # x_i >= 0
-  Append( copyvec1, copyvec2 );
-  Append( A, [ copyvec1 ] );
-  Append( b, [ 0 ] );
+    copyvec1 := ShallowCopy( vec1 );
+    copyvec2 := ShallowCopy( vec2 );
+    copyvec1[ i ] := -1; # x_i >= 0
+    Append( copyvec1, copyvec2 );
+    Append( A, [ copyvec1 ] );
+    Append( b, [ 0 ] );
 od;
 for i in [ 1 .. 2 ^ car2 ] do
-  copyvec1 := ShallowCopy( vec1 );
-  copyvec2 := ShallowCopy( vec2 );
-  copyvec2[ i ] := -1; # x_i >= 0
-  Append( copyvec1, copyvec2 );
-  Append( A, [ copyvec1 ] );
-  Append( b, [ 0 ] );
+    copyvec1 := ShallowCopy( vec1 );
+    copyvec2 := ShallowCopy( vec2 );
+    copyvec2[ i ] := -1; # x_i >= 0
+    Append( copyvec1, copyvec2 );
+    Append( A, [ copyvec1 ] );
+    Append( b, [ 0 ] );
 od;
 carInter := car1 + car2 - carTotal;
 orbitIntersec := BinaryList( carInter );
 orbit1 := BinaryList( car1 - carInter );
 orbit2 := BinaryList( car2 - carInter );
 for oInter in orbitIntersec do
-  copyvec1 := ShallowCopy( vec1 );
-  copyvec2 := ShallowCopy( vec2 );
-  for help1 in orbit1 do
-    help1 := ShallowCopy( help1 );
-    Append( help1, oInter);
-    index1 := set2intBinary( help1 ) + 1;
-    copyvec1[ index1 ] := 1;
-  od;
-  for help2 in orbit2 do
-    oInter2 := ShallowCopy( oInter );
-    help2 := ShallowCopy( help2 );
-    Append( oInter2, help2 );
-    index2 := set2intBinary( oInter2 ) + 1;
-    copyvec2[ index2 ] := -1;
-  od;
-  Append( copyvec1, copyvec2 );
-  Append( A, [ copyvec1 ] );
-  Append( b, [ 0 ] );
-  Append( linrows, [ Length( b ) ] );
+    copyvec1 := ShallowCopy( vec1 );
+    copyvec2 := ShallowCopy( vec2 );
+    for help1 in orbit1 do
+        help1 := ShallowCopy( help1 );
+        Append( help1, oInter);
+        index1 := set2intBinary( help1 ) + 1;
+        copyvec1[ index1 ] := 1;
+    od;
+    for help2 in orbit2 do
+        oInter2 := ShallowCopy( oInter );
+        help2 := ShallowCopy( help2 );
+        Append( oInter2, help2 );
+        index2 := set2intBinary( oInter2 ) + 1;
+        copyvec2[ index2 ] := -1;
+    od;
+    Append( copyvec1, copyvec2 );
+    Append( A, [ copyvec1 ] );
+    Append( b, [ 0 ] );
+    Append( linrows, [ Length( b ) ] );
 od;
 
 G := Group( [ () ] );
