@@ -183,3 +183,12 @@ dimTokeep := 2 ^ car1 + 2 ^ car2 - 2 ^ carInter;
 rlist := symCHM( A, b, linrows, dimTokeep, G, OnProjPts, OnProjIneq, false );
 return rlist;
 end;
+
+CheckResult := function( carTotal, car1, car2 )
+local rlist1, rlist2, d1, d2;
+rlist1 := MainPMF( carTotal, car1, car2 );
+rlist2 := StartFromMarginal( carTotal, car1, car2 );
+d1 := Difference(rlist1[1],rlist2[1]);
+d2 := Difference(rlist2[1],rlist1[1]);
+return [d1, d2];
+end;
