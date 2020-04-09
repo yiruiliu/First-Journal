@@ -1,1 +1,75 @@
+H := SymmetricGroup(4);
+H1 := SylowSubgroup(H,2);
 
+YiruiLeftCoset:=function(U,g)
+local Invg, right, left, i;
+Invg := Inverse(g);
+right := RightCoset(U,Invg);
+right:= AsList(right);
+left := [];
+for i in [1..Length(right)] do
+  Append(left, [Inverse(right[i])]); 
+od;
+return left; 
+end;
+
+H1 := Group([ (1,2), (3,4), (1,3)(2,4) ]);
+H2 := Group([ (2,3), (1,4), (1,3)(2,4) ]);
+H1capH2 := NormalIntersection( H1, H2 );
+
+YiruicosetsIntersection:=function(indicies) #indicies:=[0,1,1]
+local b1H1,b2H1,b3H1,d1H3,d2H3,d3H3,d4H3,d5H3,d6H3,Whole1,Whole2,combine,i,d, result;
+b1H1:=[(),(3,4),(1,2),(1,2)(3,4),(1,3)(2,4),(1,4)(2,3),(1,3,2,4),(1,4,2,3)];
+b2H1:=[(2,3),(1,2,3),(2,4,3),(1,3,4,2),(1,2,4,3),(1,4,2),(1,3,4),(1,4)];
+b3H1:=[(2,3,4),(1,2,3,4),(2,4),(1,3,2),(1,2,4),(1,4,3,2),(1,3),(1,4,3)];
+Whole1:=[b1H1,b2H1,b3H1];
+combine:=[];
+for i in [1..Length(indicies)] do
+  if indicies[i] = 1 then
+     Append(combine,Whole1[i]);
+  fi;
+od;
+
+d1H3:=[(),(1,2)(3,4),(1,3,2,4),(1,4,2,3)];
+d2H3:=[(3,4),(1,3)(2,4),(1,2),(1,4)(2,3)];
+d3H3:=[(2,3),(1,3,4),(1,2,4,3),(1,4,2)];
+d4H3:=[(2,3,4),(1,3),(1,2,4),(1,4,3,2)];
+d5H3:=[(2,4,3),(1,3,4,2),(1,2,3),(1,4)];
+d6H3:=[(2,4),(1,3,2),(1,2,3,4),(1,4,3)];
+Whole2 := [d1H3,d2H3,d3H3,d4H3,d5H3,d6H3];
+
+result:=[];
+for i in [1..Length(Whole2)] do
+  if not Intersection(Whole2[i],combine) = [] then
+     Append(result,[i]);
+  fi; 
+od;
+return result;
+end;
+
+AsSetsNested2:=function(list)
+local ansSet,l;
+ansSet:=[];
+for l in list do
+  Append(ansSet,[AsSet(l)]);
+od;
+return AsSet(ansSet);
+end;
+
+
+#top1:=[[4,5],[1,2],[3,6]];top2:=[[1,4],[2,6],[3,5]];
+#bottom1:=[[1,6],[2,4],[3,5]]; bottom2:=[[2,6],[4,5],[1,3]];
+
+
+findPermOnTwoSets:=function(top1,top2,bottom1,bottom2,group)
+local g, finalg,sortedbottom1,sortedbottom2;
+finalg:=[];
+sortedbottom1:=AsSetsNested2(bottom1);
+sortedbottom2:=AsSetsNested2(bottom2);
+for g in group do
+  if Difference(AsSetsNested2(OnSetsSets(top1,g)), sortedbottom1) = [] and Difference(AsSetsNested2(OnSetsSets(top2,g)),sortedbottom2)=[] then
+    finalg := g;
+  fi;
+od;
+return finalg;
+end;
