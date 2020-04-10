@@ -73,3 +73,51 @@ for g in group do
 od;
 return finalg;
 end;
+
+###############set of cosets automorphism testing
+#G1:=Group([(),(1,2,3),(1,3,2)]); G2:=Group([(),(1,3)]); G1capG2:=NormalIntersection(G1,G2);
+#H1:=Group([(1,2,3,4),(1,3)]); H2:=Group([(1,2,3,4),(1,3)]);H1capH2 := NormalIntersection( H1, H2 );
+
+#from set of cosets to set of indices
+fromCosetToIndices := function(coList1,coList12)
+local Indiset, co1, i, co12Len, Indi;
+IndiSet := [];
+co12Len := Length(coList12);
+for co1 in coList1 do
+  Indi := [];
+  for i in [1..co12Len] do
+    if not Intersection(co1,coList12[i]) = [] then
+      Append(Indi,[i]);
+    fi;
+  od;
+  Append(IndiSet,[Indi]);
+od;
+return IndiSet;
+end;
+
+fromGroupToSetOfCosets := function(G1,G2,H1,H2)
+local G12,H12,coListG1, coListG2, coListG12,
+coListH1, coListH2, coListH12, 
+top1, top2, bottom1, bottom2, group,finalg;
+
+G12 := NormalIntersection(G1,G2);
+H12 := NormalIntersection(H1,H2);
+
+coListG1 := RightCosets(G,G1);
+coListG2 := RightCosets(G,G2);
+coListG12 := RightCosets(G,G12);
+coListH1 := RightCosets(H,H1);
+coListH2 := RightCosets(H,H2);
+coListH12 := RightCosets(H,H12);
+
+top1 := fromCosetToIndices(coListG1,coListG12);
+top2 := fromCosetToIndices(coListG2,coListG12);
+bottom1 := fromCosetToIndices(coListH1,coListH12);
+bottom2 := fromCosetToIndices(coListH2,coListH12);
+
+group := SymmetricGroup(Length(coListG12));
+finalg := findPermOnTwoSets(top1,top2,bottom1,bottom2,group);
+
+return finalg;
+end;
+
