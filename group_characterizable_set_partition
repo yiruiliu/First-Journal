@@ -95,7 +95,7 @@ od;
 return IndiSet;
 end;
 
-fromGroupToSetOfCosets := function(G1,G2,H1,H2)
+fromGroupToSetOfCosets := function(G,G1,G2,H,H1,H2)
 local G12,H12,coListG1, coListG2, coListG12,
 coListH1, coListH2, coListH12, 
 top1, top2, bottom1, bottom2, group,finalg;
