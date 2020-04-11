@@ -80,7 +80,7 @@ end;
 
 #from set of cosets to set of indices
 fromCosetToIndices := function(coList1,coList12)
-local Indiset, co1, i, co12Len, Indi;
+local IndiSet, co1, i, co12Len, Indi;
 IndiSet := [];
 co12Len := Length(coList12);
 for co1 in coList1 do
