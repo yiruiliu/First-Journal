@@ -27,7 +27,7 @@ def FromSetPartitons2BipartiteGraph(P1,P2,baseCar,CarOfP12):
 		return G
 	return []
 
-def CanonicalGraphList2(P1,Partitions,CarofP12):
+def CanonicalGraphList2(P1,Partitions,CarOfP12):
 	baseCar = P1.base_set_cardinality()
 	CanonicalGlist = []
 	CanonicalSetlist = []
