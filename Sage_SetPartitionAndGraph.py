@@ -53,13 +53,24 @@ def FromSetPartitons2BipartiteGraphN(P1,Plist,baseCar,Carlist):
 		P12 = P1 * Plist[i]
 		CarOfP12 = Carlist[i]
 		if P12.max_block_size() == baseCar/CarOfP12 and len(P12) == CarOfP12:
-			Mat = FromSetPartitions2Matrix(P1,P2)
+			Mat = FromSetPartitions2Matrix(P1,Plist[i])
 			G = BipartiteGraph(Mat.T)
 			Glist.append(G)
 		else:
 			return []
 	return Glist
-		
+
+def showgraphFrom2SetPartition(P1,P2):
+	Mat = FromSetPartitions2Matrix(P1,P2)
+	G = BipartiteGraph(Mat.T)
+	G.show()
+	return G
+def GraphlistISOchecking(Glist1,Glist2): #len(Glist1) == len(Glist)
+	for i in range(0,len(Glist1)):
+		if not Glist1[i].is_isomorphic(Glist2[i]):
+			return false
+	return true
+
 def CanonicalGraphListN(Plist, Partitions, Carlist): # Plist=[P1,P2], partitions of X3, Carlist=[h13,h23]
 	baseCar = Plist[0].base_set_cardinality()
 	CanonicalSetlist = []
@@ -71,15 +82,11 @@ def CanonicalGraphListN(Plist, Partitions, Carlist): # Plist=[P1,P2], partitions
 				CanonicalGmatrix.append(Glist)
 				CanonicalSetlist.append(P3)
 			else:
-				verify = 1
+				verify = 0
 				for CanonicalGlist in CanonicalGmatrix:
-					for i in range(0,len(CanonicalGlist)):
-						if not CanonicalGlist[i].is_isomorphic(Glist[i]):
-							verify = 0
-							break
-					else:
-						continue
-					break
+					if GraphlistISOchecking(CanonicalGlist,Glist):
+						verify = 1
+						break
 				if verify == 0:
 					CanonicalGmatrix.append(Glist)
 					CanonicalSetlist.append(P3)
