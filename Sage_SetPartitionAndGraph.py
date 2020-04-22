@@ -83,6 +83,7 @@ def CanonicalGraphListN(Plist, Partitions, Carlist): # Plist=[P1,P2], partitions
 				if verify == 0:
 					CanonicalGmatrix.append(Glist)
 					CanonicalSetlist.append(P3)
+	return CanonicalSetlist
 						
 				
 
