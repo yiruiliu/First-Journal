@@ -97,7 +97,7 @@ end;
                  y := minrt;
                  if S = R and y = x then
                      Hlist := List(H);
-                     Append(Hlist,[t*h]);
+                     Hlist := Union(Hlist,[t*h]);
                      H:=AsGroup(Hlist);
                  else
                      Sai.(String([S,y])) := Inverse(t*h);
