@@ -1,1 +1,68 @@
+OrbitDataOnR:=function(G,SetofPartitions)
+local orbs,Transversal;
+orbs := Orbits(G, SetofPartitions,OnSetsSets);
+Transversal := List( orbs, o -> Minimum(o));
+return Sort(Transversal);
+end;
 
+ RepresentativeAction #for transporter map phi
+ Stabilizer #for stabilizer map delta
+ 
+ PermuteSetsSetsSets := function(SetsSetsSets,g)
+ local Plist,SetsSets,PSetsSets;
+ Plist := [];
+ for SetsSets in SetsSetsSets do
+     PSetsSets := OnSetsSets(SetsSets,g);
+     Append(Plist,[PSetsSets]);
+ od;
+ return Plist;
+ end;
+ 
+ pyiplus1 := function(F,pyi,SaiS) #F is a subset of size i+1
+ local z,Z,t;
+ z := Maximum(F);
+ Z := Difference(F,[z]);
+ t :=
+ end;
+ 
+ TransveralNext:=function(Ti,pyi,deltai,G,SetofAllsetPartitions)
+ # (Ti, pyi, deltai) is the input orbit datastructure
+ # pyi and deltai are records
+ local TNext,deltaNext,SaiS,R,GR,TRonGR,x,GRcapx,H,TRonH,r,dif,combined,str,t,S,rt,GS,orbrt,minrt,h,y,
+ Hlist,SaiSy,Rcupx;
+ TNext := [];
+ deltaNext := rec();
+ SaiS := rec();
+ for R in Ti do
+     GR := deltai.(String(R));
+     TRonGR := OrbitDataOnR(GR,Difference(SetofAllsetPartitions,R));
+     for x in TRonGR do
+         GRcapx := Stabilizer(GR,x,OnSetsSets);
+         H := GRcapx;
+         TRonH := OrbitDataOnR(H,R);
+         for r in TRonH do
+             dif := Difference(R,[r]);
+             combined := Union(dif,[x]);
+             str := String(combined);
+             t := pyi.(str);
+             S := PermuteSetsSetsSets(combined,t);
+             rt := OnSetsSets(r,t);
+             GS := pyi.(String(S));
+             orbrt := List(Orbit(GS, rt, OnSetsSets));
+             minrt := Minimum(orbrt);
+             h := RepresentativeAction(GS,rt,minrt,OnSetsSets);
+             y := minrt;
+             if S = R and y = x then
+                 Hlist := List(H);
+                 Append(Hlist,[t*h]);
+                 H:=AsGroup(Hlist);
+             else:
+                 SaiS.(String(y)) := Inverse(t*h);
+             if;
+         od;
+         Rcupx := Union(R,[x]);
+         Append(TNext,[Rcupx]);
+         deltaNext.(String(Rcupx)) := H
+     od;
+ od;
+ end;
