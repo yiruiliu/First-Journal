@@ -19,18 +19,31 @@ end;
  end;
  
  pyiplus1 := function(F,pyi,SaiS) #F is a subset of size i+1
- local z,Z,t;
+ local z,Z,t,S,GS,zt,orbzt,minzt,y;
  z := Maximum(F);
  Z := Difference(F,[z]);
- t :=
+ t := pyi.(String(Z));
+ S := PermuteSetsSetsSets(Z,t);
+ GS := pyi.(String(S));
+ zt := OnSetsSets(z,t);
+ orbzt := List(Orbit(GS, zt, OnSetsSets));
+ minzt := Minimum(orbzt);
+ y := OnSetsSets(zt,h);
+ if IsBound(SaiS.(String(y))) then
+     return t*h*SaiS.(String(y));
+ else:
+     return t*h;
+ if;
  end;
  
- TransveralNext:=function(Ti,pyi,deltai,G,SetofAllsetPartitions)
+ TransveralNext:=function(Ti,pyi,deltai,G,SetofAllsetPartitions,j)
+ #j := i + 1 
  # (Ti, pyi, deltai) is the input orbit datastructure
  # pyi and deltai are records
- local TNext,deltaNext,SaiS,R,GR,TRonGR,x,GRcapx,H,TRonH,r,dif,combined,str,t,S,rt,GS,orbrt,minrt,h,y,
- Hlist,SaiSy,Rcupx;
+ local TNext,pyNext,deltaNext,SaiS,R,GR,TRonGR,x,GRcapx,H,TRonH,r,dif,combined,str,t,S,rt,GS,orbrt,minrt,h,y,
+ Hlist,SaiSy,Rcupx,F;
  TNext := [];
+ pyNext := rec();
  deltaNext := rec();
  SaiS := rec();
  for R in Ti do
@@ -65,4 +78,8 @@ end;
          deltaNext.(String(Rcupx)) := H
      od;
  od;
+ for F in IteratorOfCombinations(SetofAllsetPartitions,j) do
+     pyNext.(String(F)) := pyiplus1(F,pyi,SaiS);
+ od;
+ return [TNext, deltaNext,pyNext];
  end;
