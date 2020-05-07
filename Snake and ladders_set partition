@@ -129,3 +129,35 @@ od;
 return Meet;
 end;
 
+Minimalsubfunc := function(SetofP,atomsize)
+local nPar,P1,i,Pnext;
+nPar := Length(SetofP);
+P1 := SetofP[1];
+if nPar = 1 then
+    if Length(P1) = atomsize then
+        return true;
+    else
+        return false;
+    fi;
+else
+for i in [2..nPar] do
+    Pnext := SetofP[i];
+    P1 := MeetsofTwoPartitions(P1, Pnext);
+    if Length(P1) = atomsize then
+        return true;
+    fi;
+od;
+if;
+reutrn false;
+end;
+
+MinimalityChecking := function(Tfinal,atomsize)
+local TMinimal,SetofP;
+TMinimal := [];
+for SetofP in Tfinal do
+    if Minimalsubfunc(SetofP,atomsize) then
+        Append(TMinimal,[SetofP]);
+    fi;
+od;
+return TMinimal;
+end;
