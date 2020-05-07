@@ -50,7 +50,8 @@ end;
  Z := Difference(F,[z]);
  t := pyi.(String(Z));
  S := PermuteSetsSetsSets(Z,t);
- GS := Stabilizer(G,S,OnSetsSetsSets);
+ Sort(S);
+ GS := deltai.(String(S));
  zt := OnSetsSets(z,t);
  orbzt := List(Orbit(GS, zt, OnSetsSets));
  minzt := Minimum(orbzt);
@@ -89,14 +90,15 @@ end;
                  str := String(combined);
                  t := pyi.(str);
                  S := PermuteSetsSetsSets(combined,t);
+                 Sort(S);
                  rt := OnSetsSets(r,t);
-                 GS := Stabilizer(G,S,OnSetsSetsSets);
+                 GS := deltai.(String(S));
                  orbrt := List(Orbit(GS, rt, OnSetsSets));
                  minrt := Minimum(orbrt);
                  h := RepresentativeAction(GS,rt,minrt,OnSetsSets);
                  y := minrt;
                  if S = R and y = x then
-                     H := ClosureGroup(G,t*h);
+                     H := ClosureGroup(H,t*h);
                  else
                      Sai.(String([S,y])) := Inverse(t*h);
                  fi;
