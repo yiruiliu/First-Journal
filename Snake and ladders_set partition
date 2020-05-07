@@ -96,9 +96,7 @@ end;
                  h := RepresentativeAction(GS,rt,minrt,OnSetsSets);
                  y := minrt;
                  if S = R and y = x then
-                     Hlist := List(H);
-                     Hlist := Union(Hlist,[t*h]);
-                     H:=AsGroup(Hlist);
+                     H := ClosureGroup(G,t*h);
                  else
                      Sai.(String([S,y])) := Inverse(t*h);
                  fi;
