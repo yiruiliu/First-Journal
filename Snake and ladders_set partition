@@ -115,4 +115,17 @@ end;
  return [TNext, deltaNext,pyNext];
  end;
 
+MeetsofTwoPartitions := function(P1,P2)
+local Meet,set1,set2,interset;
+Meet := [];
+for set1 in P1 do
+    for set2 in P2 do
+        interset := Intersection(set1,set2);
+        if not interset = [] then
+            Append(Meet,[interset]);
+        fi;
+    od;
+od;
+return Meet;
+end;
 
