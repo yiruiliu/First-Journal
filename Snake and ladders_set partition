@@ -161,3 +161,27 @@ for SetofP in Tfinal do
 od;
 return TMinimal;
 end;
+
+ReplicaChecking := function(G,TMinimal)
+local Norep,SetofSetpartions,Spar;
+Norep := [];
+for SetofSetpartions in TMinimal do
+    Spar := Minimum(Orbit(G,SetofSetpartions,OnSetsSetsSets));
+    if not Spar in Norep then
+        Append(Norep,[Spar]);
+    fi;
+od;
+return Norep;
+end;
+
+YiruiLeiterspiel := function(atomsize,NofRV)
+local G,SetofAllsetPartitions,o,TDP,i,TMinimal;
+G := SymmetricGroup(atomsize);
+SetofAllsetPartitions := Difference(PartitionsSet([1..atomsize]), [[List([1..atomsize],o -> o)]]);
+TDP := InitialOrbitData(G,SetofAllsetPartitions);
+for i in [2..NofRV] do
+    TDP := TransversalNext(TDP[1],TDP[2],TDP[3],G,SetofAllsetPartitions,i);
+od;
+TMinimal := MinimalityChecking(TDP[1],atomsize);
+return TMinimal;
+end;
