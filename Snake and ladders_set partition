@@ -147,8 +147,8 @@ for i in [2..nPar] do
         return true;
     fi;
 od;
-if;
-reutrn false;
+fi;
+return false;
 end;
 
 MinimalityChecking := function(Tfinal,atomsize)
