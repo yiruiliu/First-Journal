@@ -100,7 +100,7 @@ end;
 
 DFZ8 := function(A,B,C,D,E,N) #inequality <= 0
     local ine;
-    ine := 2*IAandB(A,B,N) -  IAandBGivenC(A,B,C,N) - IAandBGivenC(A,B,D,N) - IAandBGivenC(A,B,E,N) - IAandB(C,D,N) - IAandBcapC(D,E,C,N);
+    ine := 2*IAandB(A,B,N) -  IAandBGivenC(A,B,C,N) - IAandBGivenC(A,B,D,N) - IAandBGivenC(A,B,E,N) - IAandB(C,D,N) - IAandBcapC(E,C,D,N);
     return ine;
 end;
 
