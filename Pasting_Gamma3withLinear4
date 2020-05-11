@@ -119,7 +119,7 @@ end;
 
 DFZ11 := function(A,B,C,D,E,N) #inequality <= 0
     local ine;
-    ine := IAandBcapC(A,B,C) - IAandBGivenGandD(A,C,B,D,N) - IAandBcapC(A,C,E,N) - IAandBGivenGandD(A,B,D,E,N) - IAandBGivenGandD(B,D,C,E,N);
+    ine := IAandBcapC(A,B,C,N) - IAandBGivenGandD(A,C,B,D,N) - IAandBcapC(A,C,E,N) - IAandBGivenGandD(A,B,D,E,N) - IAandBGivenGandD(B,D,C,E,N);
     return ine;
 end;
 
