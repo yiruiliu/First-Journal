@@ -36,7 +36,7 @@ IAandBGivenGandD := function(A,B,C,D,N) # transform I(A;B|C,D) into a linear que
     return lin;
 end;
 
-IAcapBandC := function(A,B,C,N) # transform I(A;B,C) into a linear queation of subset entropies with length 2^N-1 
+IAandBcapC := function(A,B,C,N) # transform I(A;B,C) into a linear queation of subset entropies with length 2^N-1 
     local lin;
     lin := ZeroMutable([1..2^N-1]);
     lin[set2int([A])] := 1;
@@ -100,7 +100,7 @@ end;
 
 DFZ8 := function(A,B,C,D,E,N) #inequality <= 0
     local ine;
-    ine := 2*IAandB(A,B,N) -  IAandBGivenC(A,B,C,N) - IAandBGivenC(A,B,D,N) - IAandBGivenC(A,B,E,N) - IAandB(C,D,N) - IAcapBandC(D,E,C,N);
+    ine := 2*IAandB(A,B,N) -  IAandBGivenC(A,B,C,N) - IAandBGivenC(A,B,D,N) - IAandBGivenC(A,B,E,N) - IAandB(C,D,N) - IAandBcapC(D,E,C,N);
     return ine;
 end;
 
@@ -111,5 +111,33 @@ DFZ9 := function(A,B,C,D,E,N) #inequality <= 0
     return ine;
 end;
 
+DFZ10 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := 2*IAandB(A,B,N) - IAandBGivenC(A,B,C,N) - IAandBGivenC(A,B,D,N) - IAandB(C,D,N) - IAandB(A,E,N) - IAandBGivenC(B,D,E,N) - IAandBGivenGandD(A,C,D,E,N);
+    return ine;
+end;
+
+DFZ11 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandBcapC(A,B,C) - IAandBGivenGandD(A,C,B,D,N) - IAandBcapC(A,C,E,N) - IAandBGivenGandD(A,B,D,E,N) - IAandBGivenGandD(B,D,C,E,N);
+    return ine;
+end;
+
+DFZ12 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandBcapC(A,B,C) - IAandB(A,C,N) - IAandBGivenC(A,B,D,N) - IAandBGivenC(A,D,E,N) - IAandBGivenC(B,E,C,N) - IAandBGivenGandD(A,C,B,E,N) - IAandBGivenGandD(C,E,B,D,N); 
+    return ine;
+end;
 
 
+DFZ13 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandBcapC(A,B,C) - IAandBGivenC(A,B,D,N) - IAandBcapC(A,C,E,N) - IAandBGivenGandD(B,D,C,E,N) - IAandBGivenGandD(A,C,B,E,N) - IAandBGivenGandD(C,E,B,D,N);
+    return ine;
+end;
+
+DFZ14 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandBcapC(A,B,C) 
+    return ine;
+end;
