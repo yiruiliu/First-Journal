@@ -44,3 +44,72 @@ IAcapBandC := function(A,B,C,N) # transform I(A;B,C) into a linear queation of s
     lin[set2int([A,B,C])] := -1;
     return lin;
 end;
+
+IAcapBandCGivenD := function(A,B,C,D,N) # transform I(A,B;C|D) into a linear queation of subset entropies with length 2^N-1 
+    local lin;
+    lin := ZeroMutable([1..2^N-1]);
+    lin[set2int([A,B,D])] := 1;
+    lin[set2int([C,D])] := 1;
+    lin[set2int([A,B,C,D])] := -1;
+    lin[set2int([D])] := -1;
+    return lin;
+end;
+
+DFZ1 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandB(A,B,N) - IAandBGivenC(A,B,C,N) - IAandBGivenC(A,B,D,N) - IAandBGivenC(C,D,E,N) - IAandB(A,E,N);
+    return ine;
+end;
+
+DFZ2 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandB(A,B,N) -  IAandBGivenC(A,B,C,N) - IAandBGivenC(A,C,D,N) - IAandBGivenC(A,D,E,N) - IAandB(B,E,N);
+    return ine;
+end;
+
+DFZ3 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandB(A,B,N) - IAandB(A,C,N) - IAandBGivenC(A,B,D,N) - IAandBGivenC(B,E,C,N) - IAandBGivenGandD(A,D,C,E,N);
+    return ine;
+end;
+
+DFZ4 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandB(A,B,N) - IAandB(A,C,N) - IAandBGivenGandD(A,B,D,E,N) - IAandBGivenC(B,D,C,N) - IAandBGivenGandD(A,E,C,D,N);
+    return ine;
+end;
+
+
+DFZ5 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandB(A,B,N) - IAandB(A,C,N) - IAandBGivenC(B,D,C,N) - IAandBGivenC(A,E,D,N) -  IAandBGivenGandD(A,B,C,E,N) - IAandBGivenGandD(B,C,D,E,N);
+    return ine;
+end;
+
+DFZ6 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandB(A,B,N) - IAandB(A,C,N) - IAandBGivenC(B,D,E,N) - IAandBGivenC(D,E,C,N) - IAandBGivenGandD(A,B,C,D,N) - IAandBGivenGandD(A,C,D,E,N);
+    return ine;
+end;
+
+DFZ7 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandB(A,B,N) - IAandBGivenC(A,C,D,N) - IAandBGivenC(A,E,C,N) - IAandB(B,D,N) - IAandBGivenGandD(B,D,C,E,N) - IAandBGivenGandD(A,B,D,E,N);
+    return ine;
+end;
+
+DFZ8 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := 2*IAandB(A,B,N) -  IAandBGivenC(A,B,C,N) - IAandBGivenC(A,B,D,N) - IAandBGivenC(A,B,E,N) - IAandB(C,D,N) - IAcapBandC(D,E,C,N);
+    return ine;
+end;
+
+
+DFZ9 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := 2*IAandB(A,B,N) - IAandB(A,C,N) - IAandBGivenC(A,B,D,N) - IAandBGivenC(A,B,E,N) - IAandB(D,E,N) - IAcapBandCGivenD(D,E,B,C,N);
+    return ine;
+end;
+
+
+
