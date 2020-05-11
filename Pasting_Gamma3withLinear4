@@ -36,3 +36,11 @@ IAandBGivenGandD := function(A,B,C,D,N) # transform I(A;B|C,D) into a linear que
     return lin;
 end;
 
+IAcapBandC := function(A,B,C,N) # transform I(A;B,C) into a linear queation of subset entropies with length 2^N-1 
+    local lin;
+    lin := ZeroMutable([1..2^N-1]);
+    lin[set2int([A])] := 1;
+    lin[set2int([B,C])] := 1;
+    lin[set2int([A,B,C])] := -1;
+    return lin;
+end;
