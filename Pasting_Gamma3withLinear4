@@ -16,6 +16,23 @@ IAandB := function(A,B,N) # transform I(A;B) into a linear queation of subset en
     return lin;
 end;
 
-IAndBGivenC := function(A,B,C,N) # transform I(A;B|C) into a linear queation of subset entropies with length 2^N-1 
-local ;
+IAandBGivenC := function(A,B,C,N) # transform I(A;B|C) into a linear queation of subset entropies with length 2^N-1 
+    local lin;
+    lin := ZeroMutable([1..2^N-1]);
+    lin[set2int([A,C])] := 1;
+    lin[set2int([B,C])] := 1;
+    lin[set2int([A,B,C])] := -1;
+    lin[set2int([C])] := -1;
+    return lin;
 end;
+
+IAandBGivenGandD := function(A,B,C,D,N) # transform I(A;B|C,D) into a linear queation of subset entropies with length 2^N-1 
+    local lin;
+    lin := ZeroMutable([1..2^N-1]);
+    lin[set2int([A,C,D])] := 1;
+    lin[set2int([B,C,D])] := 1;
+    lin[set2int([A,B,C,D])] := -1;
+    lin[set2int([C,D])] := -1;
+    return lin;
+end;
+
