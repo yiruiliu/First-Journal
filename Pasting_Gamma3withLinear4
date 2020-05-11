@@ -1,1 +1,17 @@
+set2int := function ( s )
+    local  i, j;
+    i := 0;
+    for j  in s  do
+        i := i + 2 ^ (Int( j ) - 1);
+    od;
+    return i;
+end;
 
+IAandB := function(A,B,N) # transform I(A;B) into a linear queation of subset entropies with length 2^N-1 
+    local lin;
+    lin := ZeroMutable([1..2^N-1]);
+    lin[set2int([A])] := 1;
+    lin[set2int([B])] := 1;
+    lin[set2int([A,B])] := -1;
+    return lin;
+end;
