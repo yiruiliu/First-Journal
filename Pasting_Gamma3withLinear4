@@ -125,19 +125,19 @@ end;
 
 DFZ12 := function(A,B,C,D,E,N) #inequality <= 0
     local ine;
-    ine := IAandBcapC(A,B,C) - IAandB(A,C,N) - IAandBGivenC(A,B,D,N) - IAandBGivenC(A,D,E,N) - IAandBGivenC(B,E,C,N) - IAandBGivenGandD(A,C,B,E,N) - IAandBGivenGandD(C,E,B,D,N); 
+    ine := IAandBcapC(A,B,C,N) - IAandB(A,C,N) - IAandBGivenC(A,B,D,N) - IAandBGivenC(A,D,E,N) - IAandBGivenC(B,E,C,N) - IAandBGivenGandD(A,C,B,E,N) - IAandBGivenGandD(C,E,B,D,N); 
     return ine;
 end;
 
 
 DFZ13 := function(A,B,C,D,E,N) #inequality <= 0
     local ine;
-    ine := IAandBcapC(A,B,C) - IAandBGivenC(A,B,D,N) - IAandBcapC(A,C,E,N) - IAandBGivenGandD(B,D,C,E,N) - IAandBGivenGandD(A,C,B,E,N) - IAandBGivenGandD(C,E,B,D,N);
+    ine := IAandBcapC(A,B,C,N) - IAandBGivenC(A,B,D,N) - IAandBcapC(A,C,E,N) - IAandBGivenGandD(B,D,C,E,N) - IAandBGivenGandD(A,C,B,E,N) - IAandBGivenGandD(C,E,B,D,N);
     return ine;
 end;
 
 DFZ14 := function(A,B,C,D,E,N) #inequality <= 0
     local ine;
-    ine := IAandBcapC(A,B,C) 
+    ine := IAandBcapC(A,B,C,N) - IAandB(A,D,N) - IAandBGivenC(B,E,D,N) - IAandBGivenGandD(A,B,C,E,N) - IAandBGivenGandD(A,C,B,D,N) - IAandBGivenGandD(A,C,D,E,N);
     return ine;
 end;
