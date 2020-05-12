@@ -283,5 +283,49 @@ DFZ24Allpermutations := function()
     return Dfinal;
 end;
 
+### All RVs Permuations of Ingleton5
+In5_1 := function(A,B,C,D,E,N)
+    local ine;
+    ine := IAandB(A,B,N) -  IAandBGivenC(A,B,C,N) - IAandBGivenC(A,B,D,N) - IAandB(C,D,N);
+    return ine;
+end;
+
+In5_2 := function(A,B,C,D,E,N)##ERROR
+    local ine;
+    ine := IAandBcapC(B,A,E,N) - IAcapBandCGivenD(A,E,B,C,N) - IAcapBandCGivenD(A,E,B,D,N) - IAandB(C,D,N);
+    return ine;
+end;
+
+In5_3 := function(A,B,C,D,E,N)
+    local ine;
+    ine := IAandB(A,B,N) - IAandBGivenGandD(A,B,C,E,N) - IAandBGivenC(A,B,D,N) - IAandBcapC(D,C,E,N);
+    return ine;
+end;
 
 
+InglPermutations := function(OrbvarList,Infunc)
+    local ineList, l, ine;
+    ineList := [];
+    for l in OrbvarList do
+        ine := Infunc(l[1],l[2],l[3],l[4],l[5],5);
+        if not ine in ineList then 
+            Append(ineList,[ine]);
+        fi;
+    od;
+    return ineList;
+end;
+
+Ingle5Allpermutations := function()
+    local varList,G,OrbvarList,Dfinal,D;
+    varList :=[1,2,3,4,5];
+    G := SymmetricGroup(5);
+    OrbvarList := Orbit(G,varList,OnTuples);
+    Dfinal := [];
+    D := InglPermutations(OrbvarList,In5_1);
+    Append(Dfinal,D);
+    D := InglPermutations(OrbvarList,In5_2);
+    Append(Dfinal,D);
+    D := InglPermutations(OrbvarList,In5_3);
+    Append(Dfinal,D);
+    return Dfinal;
+end;
