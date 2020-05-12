@@ -189,3 +189,14 @@ DFZ20 := function(A,B,C,D,E,N) #inequality <= 0
     return ine;
 end;
 
+DFZ21 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandB(A,B,N) + IAandB(A,C,N) - IAandB(B,D,N) - IAandBGivenC(A,C,D,N) - IAandBGivenC(A,D,E,N) - IAandB(C,E,N) - IAandBGivenGandD(A,B,C,E,N) - IAandBGivenGandD(B,C,D,E,N) - IAandBGivenGandD(B,E,C,D,N);
+    return ine;
+end;
+
+DFZ22 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := 2 * IAandB(A,B,N) + IAandB(A,C,N) - IAandBGivenC(A,B,C,N) - IAandBGivenC(A,B,D,N) - IAandB(C,D,N) - IAandBGivenC(A,C,E,N) - IAandBGivenC(A,D,E,N) - 2 * IAandB(B,E,N) - IAandBGivenGandD(B,C,D,E,N) - IAandBGivenGandD(C,E,B,D,N);
+    return ine;
+end;
