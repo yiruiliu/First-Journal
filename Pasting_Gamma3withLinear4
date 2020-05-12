@@ -55,6 +55,17 @@ IAcapBandCGivenD := function(A,B,C,D,N) # transform I(A,B;C|D) into a linear que
     return lin;
 end;
 
+IAcapBandCcapD := function(A,B,C,D,N) # transform I(A,B;C,D) into a linear queation of subset entropies with length 2^N-1 
+    local lin;
+    lin := ZeroMutable([1..2^N-1]);
+    lin[set2int([A,B])] := 1;
+    lin[set2int([C,D])] := 1;
+    lin[set2int([A,B,C,D])] := -1;
+    return lin;
+end;
+
+
+
 DFZ1 := function(A,B,C,D,E,N) #inequality <= 0
     local ine;
     ine := IAandB(A,B,N) - IAandBGivenC(A,B,C,N) - IAandBGivenC(A,B,D,N) - IAandBGivenC(C,D,E,N) - IAandB(A,E,N);
@@ -141,3 +152,23 @@ DFZ14 := function(A,B,C,D,E,N) #inequality <= 0
     ine := IAandBcapC(A,B,C,N) - IAandB(A,D,N) - IAandBGivenC(B,E,D,N) - IAandBGivenGandD(A,B,C,E,N) - IAandBGivenGandD(A,C,B,D,N) - IAandBGivenGandD(A,C,D,E,N);
     return ine;
 end;
+
+DFZ15 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandBcapC(A,B,C,N) - IAandB(A,D,N) - IAandBGivenC(B,E,D,N) - IAandBGivenC(A,C,E,N) - IAandBGivenGandD(A,B,C,D,N) - IAandBGivenGandD(A,C,B,D,N) - IAandBGivenGandD(B,D,C,E,N);
+    return ine;
+end;
+
+DFZ16 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandBcapC(A,B,C,N) -  IAandBGivenGandD(A,B,C,D,N) - IAandBGivenGandD(A,C,B,D,N) - IAcapBandCGivenD(B,C,D,E,N) - IAandBGivenGandD(B,C,D,E,N) - IAandB(A,E,N);
+    return ine;
+end;
+
+DFZ17 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine :=  IAcapBandCcapD(A,B,C,D,N) - IAandBcapC(D,A,B,N) - IAandBGivenGandD(A,D,B,C,N) - IAandBGivenGandD(B,D,A,C,N) - IAandBGivenGandD(A,C,B,E,N) - IAandBGivenGandD(B,C,A,E,N) - IAandBGivenGandD(A,B,D,E,N) - IAandBGivenC(C,E,D,N); 
+    return ine;
+end;
+
+
