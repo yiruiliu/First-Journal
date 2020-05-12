@@ -212,3 +212,76 @@ DFZ24 := function(A,B,C,D,E,N) #inequality <= 0
     ine := IAandBcapC(A,C,D,N) + IAandBcapC(B,C,D,N) - IAandB(B,D,N) - IAandBGivenC(B,C,E,N) - IAandBGivenC(C,E,D,N) - IAandB(A,E,N) - IAandBGivenGandD(A,C,B,D,N) - IAcapBandCGivenD(A,B,D,C,N) - IAandBGivenGandD(A,D,B,E,N) - IAandBGivenGandD(A,B,D,E,N);
     return ine;
 end;
+
+DFZPermutations := function(OrbvarList,DFZfunc)
+    local ineList, l, ine;
+    ineList := [];
+    for l in OrbvarList do
+        ine := DFZfunc(l[1],l[2],l[3],l[4],l[5],5);
+        if not ine in ineList then 
+            Append(ineList,[ine]);
+        fi;
+    od;
+    return ineList;
+end;
+
+
+DFZ24Allpermutations := function()
+    local varList,G,OrbvarList,Dfinal,D;
+    varList :=[1,2,3,4,5];
+    G := SymmetricGroup(5);
+    OrbvarList := Orbit(G,varList,OnTuples);
+    Dfinal := [];
+    D := DFZPermutations(OrbvarList,DFZ1);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ2);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ3);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ4);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ5);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ6);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ7);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ8);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ9);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ10);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ11);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ12);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ13);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ14);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ15);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ16);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ17);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ18);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ19);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ20);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ21);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ22);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ23);
+    Append(Dfinal,D);
+    D := DFZPermutations(OrbvarList,DFZ24);
+    Append(Dfinal,D);
+    return Dfinal;
+end;
+
+
+
