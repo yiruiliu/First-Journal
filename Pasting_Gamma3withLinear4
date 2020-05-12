@@ -183,3 +183,9 @@ DFZ19 := function(A,B,C,D,E,N) #inequality <= 0
     return ine;
 end;
 
+DFZ20 := function(A,B,C,D,E,N) #inequality <= 0
+    local ine;
+    ine := IAandB(A,B,N) + IAandB(A,C,N) - IAandB(B,C,N) - IAandB(B,D,N) - IAandBGivenC(A,C,D,N) - IAandBGivenC(A,B,E,N) - IAandBGivenC(A,E,B,N) - IAandBGivenC(C,D,E,N) - IAandBGivenGandD(B,E,C,D,N);
+    return ine;
+end;
+
