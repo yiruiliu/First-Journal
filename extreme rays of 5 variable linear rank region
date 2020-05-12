@@ -1,5 +1,35 @@
 #The 31-dimensional vectors which generate the extreme rays
  #  for the 5-variable linear rank region 
+ S5 := [[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3],[4],[1,4],[2,4],[1,2,4],[3,4],[1,3,4],[2,3,4],
+ [1,2,3,4],[5],[1,5],[2,5],[1,2,5],[3,5],[1,3,5],[2,3,5],[1,2,3,5],[4,5],
+ [1,4,5],[2,4,5],[1,2,4,5],[3,4,5],[1,3,4,5],[2,3,4,5],[1,2,3,4,5]];
+ set2int := function ( s )
+    local  i, j, S;
+    i := 0;
+    S := Set(s);
+    for j  in S  do
+        i := i + 2 ^ (Int( j ) - 1);
+    od;
+    return i;
+end;
+ AllPermutationL5:=function(S5,L5)
+     local Finalext,orb,ext,o,posiList,i,extnew;
+     Finalext := [];
+     orb := Orbit(SymmetricGroup(5),S5,OnTuplesSets);
+     for ext in L5 do
+         for o in orb do
+             posiList := List(o, i -> set2int(i));
+             extnew := ShallowCopy(ext);
+             for j in [1..Length(posiList)] do
+                 extnew[j] := ext[posiList[j]];
+             od;
+             if not extnew in Finalext then
+                 Append(Finalext,[extnew]);
+             fi; 
+         od;
+     od;
+     return Finalext;
+ end;
 L5:=[ [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
   [ 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
   [ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
