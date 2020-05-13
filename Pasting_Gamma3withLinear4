@@ -368,6 +368,15 @@ SubsetEntropy:=function(Set1, Set2, N) # Set1 := [1,2,3]; Set2 := [2,3,4,5]; N :
 	JEntropy:=[Subtotal,0,N];
 	return JEntropy;
 end;
+
+MatrixRemoveColumn:=function(A,index)
+	local AT,Af;
+	AT:=TransposedMat(A);
+	AT:=ShallowCopy(AT);
+	Remove(AT,index);
+	Af:=TransposedMat(AT);
+	return Af;
+end;
 ######## end of subfunctions
 
 ProjLinear5 := function(InglFinal,DFZ24Final,Set1,Set2,N) #AX<=b
