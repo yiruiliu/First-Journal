@@ -489,3 +489,33 @@ GenShannonUnBounded:=function(n)
 	#Append(b,[1]);
 	return [A,b];
 end;
+
+
+In4 := function(A,B,C,D,N) #inequality <= 0
+    local ine;
+    ine := IAandB(A,B,N) - IAandBGivenC(A,B,C,N) - IAandBGivenC(A,B,D,N) - IAandB(C,D,N);
+    return ine;
+end;
+
+Ingl4Permutations := function(OrbvarList,Infunc)
+    local ineList, l, ine;
+    ineList := [];
+    for l in OrbvarList do
+        ine := Infunc(l[1],l[2],l[3],l[4],4);
+        if not ine in ineList then 
+            Append(ineList,[ine]);
+        fi;
+    od;
+    return ineList;
+end;
+
+Ingle4Allpermutations := function()
+    local varList,G,OrbvarList,Dfinal,D;
+    varList :=[1,2,3,4];
+    G := SymmetricGroup(4);
+    OrbvarList := Orbit(G,varList,OnTuples);
+    Dfinal := [];
+    D := Ingl4Permutations(OrbvarList,In4);
+    Append(Dfinal,D);
+    return Dfinal;
+end;
