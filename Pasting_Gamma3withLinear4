@@ -398,3 +398,94 @@ ProjLinear5 := function(InglFinal,DFZ24Final,Set1,Set2,N) #AX<=b
     return rlist1;
 end;
 
+#####################Gamma_{1,2,3} cap Linear_{2,3,4,5}
+GenShannonBounded:=function(n)
+	local rlist,mtx,str,i,j,shineq,nset_i,ineq,pairs,p,Klist,K,nset_ij,greq,neq,A,b,sum2one,s;
+	shineq:=[];
+	# first add H(X_i|rest)>=0 type inequalities
+	for i in [1..n] do
+		nset_i:=[1..n];
+		SubtractSet(nset_i,[i]);
+		ineq:=ZeroMutable([1..2^n]);
+		ineq[set2int([1..n])+1]:=1;
+		ineq[set2int(nset_i)+1]:=-1;
+		Append(shineq,[ineq]);
+	od;
+	# second, add I(X_i,X_j|X_K) >=0
+	pairs:=Combinations([1..n],2);
+	for p in pairs do
+		nset_ij:=[1..n];
+		SubtractSet(nset_ij,p);
+		Klist:=Combinations(nset_ij);
+		for K in Klist do
+			ineq:=ZeroMutable([1..2^n]);
+			ineq[set2int(Union(K,[p[1]]))+1]:=1;
+			ineq[set2int(Union(K,[p[2]]))+1]:=1;
+			ineq[set2int(Union(K,p))+1]:=-1;
+			if Size(K)>0 then
+				ineq[set2int(K)+1]:=-1;
+			fi;
+		Append(shineq,[ineq]);
+		od;
+	od;
+	shineq:=-shineq;
+	sum2one:=ZeroMutable([1..2^n-1]);
+	for i in [1..2^n-1] do
+		sum2one[i]:=1;
+	od;
+	A:=[];
+	b:=[];
+	for s in shineq do
+		Append(A,[s{[2..Size(s)]}]);
+		Append(b,[0]);
+	od;
+	Append(A,[sum2one]);
+	Append(b,[1]);
+	return [A,b];
+end;
+
+GenShannonUnBounded:=function(n)
+# returns [A,b] s.t. Ax<=b are the inequalities
+	local rlist,mtx,str,i,j,shineq,nset_i,ineq,pairs,p,Klist,K,nset_ij,greq,neq,A,b,sum2one,s;
+	shineq:=[];
+	# first add H(X_i|rest)>=0 type inequalities
+	for i in [1..n] do
+		nset_i:=[1..n];
+		SubtractSet(nset_i,[i]);
+		ineq:=ZeroMutable([1..2^n]);
+		ineq[set2int([1..n])+1]:=1;
+		ineq[set2int(nset_i)+1]:=-1;
+		Append(shineq,[ineq]);
+	od;
+	# second, add I(X_i,X_j|X_K) >=0
+	pairs:=Combinations([1..n],2);
+	for p in pairs do
+	nset_ij:=[1..n];
+	SubtractSet(nset_ij,p);
+	Klist:=Combinations(nset_ij);
+	for K in Klist do
+		ineq:=ZeroMutable([1..2^n]);
+		ineq[set2int(Union(K,[p[1]]))+1]:=1;
+		ineq[set2int(Union(K,[p[2]]))+1]:=1;
+		ineq[set2int(Union(K,p))+1]:=-1;
+		if Size(K)>0 then
+			ineq[set2int(K)+1]:=-1;
+		fi;
+		Append(shineq,[ineq]);
+		od;
+	od;
+	shineq:=-shineq;
+	sum2one:=ZeroMutable([1..2^n-1]);
+	for i in [1..2^n-1] do
+		sum2one[i]:=1;
+	od;
+	A:=[];
+	b:=[];
+	for s in shineq do
+		Append(A,[s{[2..Size(s)]}]);
+		Append(b,[0]);
+	od;
+	#Append(A,[sum2one]);
+	#Append(b,[1]);
+	return [A,b];
+end;
