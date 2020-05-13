@@ -573,3 +573,16 @@ ConeAcapConeB := function(Set1,Set2,A,B) # example: Set1={1,2,3}, Set2={2,3,4,5}
 	return AB;
 end;
 
+Gamma3CapLinear4Main := function(Set1,Set2)
+	local Gamma3, Gamma4,Linear4,Ingle4,AB;
+	Gamma3 := GenShannonUnBounded(3);
+	Gamma3 := Gamma3[1];
+	Gamma4 := GenShannonUnBounded(4);
+	Linear4 := Gamma4[1];
+	Ingle4 := Ingle4Allpermutations();
+	Append(Linear4,Ingle4);
+	AB: = ConeAcapConeB(Set1,Set2,Gamma3,Linear4);
+	return AB;
+end;
+
+
