@@ -519,3 +519,57 @@ Ingle4Allpermutations := function()
     Append(Dfinal,D);
     return Dfinal;
 end;
+
+ConeAcapConeB := function(Set1,Set2,A,B) # example: Set1={1,2,3}, Set2={2,3,4,5} A_{1,2,3} \cap B_{2,3,4,5}
+	local Uset,SubUset,SubSet1,SubSet2,Rset,Rindex,Kindex,o,baseine,i,ZeroindexA,ZeroindexB,AB,baseineA,baseineB,ine,newine,j;
+	Uset := Union(Set1,Set2);
+	SubUset := Difference(Combinations(Uset),[[]]);
+	SubSet1 := Difference(Combinations(Set1),[[]]);
+	SubSet2 := Difference(Combinations(Set2),[[]]);
+	Rset := Difference(Difference(SubUset,SubSet1),SubSet2); #subsets that need to be remove
+	Rindex := List(Rset, o -> set2int(o));  # indcies that need to be removed
+	Kindex := Difference([1..2^Length(Uset)-1],Rindex);# indcies that need to be removed
+	baseine := ZeroMutable([1..2^Length(Uset)-1]) - 1; # -1 indicates the positions need to be filled in
+	for i in Rindex do
+		baseine[i] := -2; # -2 indicates the posistions need to be removed
+	od;
+	ZeroindexA := Difference(Difference(SubUset,SubSet1),Rset);
+	ZeroindexA := List(ZeroindexA, o -> set2int(o));
+	baseineA := ShallowCopy(baseine);
+	for i in ZeroindexA do
+		baseineA[i] := 0; # 0 indicates the posistions need to be filled with 0
+	od;
+	ZeroindexB := Difference(Difference(SubUset,SubSet2),Rset);
+	ZeroindexB := List(ZeroindexB, o -> set2int(o));
+	baseineB := ShallowCopy(baseine);
+	for i in ZeroindexB do
+		baseineB[i] := 0; # 0 indicates the posistions need to be filled with 0
+	od;
+	AB := [];
+	for ine in A do
+		newine := ShallowCopy(baseineA);
+		j := 1;
+		for i in [1..Length(newine)] do 
+			if newine[i] = -1 then
+				newine[i] := ine[j];
+				j := j + 1;
+			fi;
+		od;
+		newine := newine{Kindex};
+		Append(AB,[newine]);
+	od;
+	for ine in B do
+		newine := ShallowCopy(baseineB);
+		j := 1;
+		for i in [1..Length(newine)] do 
+			if newine[i] = -1 then
+				newine[i] := ine[j];
+				j := j + 1;
+			fi;
+		od;
+		newine := newine{Kindex};
+		Append(AB,[newine]);
+	od;
+	return AB;
+end;
+
