@@ -581,7 +581,7 @@ Gamma3CapLinear4Main := function(Set1,Set2)
 	Linear4 := Gamma4[1];
 	Ingle4 := Ingle4Allpermutations();
 	Append(Linear4,Ingle4);
-	AB: = ConeAcapConeB(Set1,Set2,Gamma3,Linear4);
+	AB := ConeAcapConeB(Set1,Set2,Gamma3,Linear4);
 	return AB;
 end;
 
